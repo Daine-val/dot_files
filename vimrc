@@ -3,29 +3,38 @@ set history=150    " How many lines of history to remember
 set encoding=utf-8 " we want utf-8 encoding
 "set viminfo+=!     " make sure it can save viminfo
 
-" Enable Pathogen
-execute pathogen#infect()
+" Enable Pathogen (if it is installed)
+silent! execute pathogen#infect()
+silent! execute pathogen#helptags()
+
 
 "-- Theme/Colours ------------------------------------------------------------"
 set background=dark " Use a dark background
 set t_Co=256        " Use 256 colours
-filetype plugin on  " Enable file detection
 syntax on           " Enable syntax highlighting
-colorscheme badwolf " Set our colour scheme
+set synmaxcol=120   " Don't highlight long lines to avoid slow down
+
+" Try to set a fancy colour scheme fallback to a built in one.
+" This assumes we are on a modern version of vim that supports try/catch but
+" should be safe assumption.
+try
+    colorscheme badwolf
+catch
+    colorscheme koehler
+endtry
 
 
 "-- Spaces and Tabs ----------------------------------------------------------"
 set expandtab            " Expand tabs to be spaces
 set softtabstop=4        " Number of spaces in tab when editing
-set cindent shiftwidth=4 " How many spaces to indent with > and <
-
+set shiftwidth=4         " How many spaces to indent with > and <
 
 "-- Searching ----------------------------------------------------------------"
 set incsearch            " Search as you type
 set hlsearch             " Highlight Search results
 set ignorecase smartcase " Only search case sensitive if you include case
 
-" turn off search highlight with "\ "
+" Turn off search highlight with "\ "
 nnoremap <leader><space> :nohlsearch<CR>
 
 
@@ -53,37 +62,44 @@ set novisualbell       " don't blink
 
 set scrolloff=5        " Keep 5 lines above and below visable
 
-filetype indent on     " load filetype-specific indent files
 
 " Fallback status line
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [POS=%04l,%04v][%p%%]
 
 
 "-- Folding ------------------------------------------------------------------"
-"set foldenable        " enable folding
+set nofoldenable      " don't enable folding
 "set foldlevelstart=10 " open most folds by default
 "set foldmethod=indent " fold based on indent level
 
 
-"-- Configure vim-airline ----------------------------------------------------"
-let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#virtualenv#enabled = 1
+"-- Configure plugins --------------------------------------------------------"
+" general
+filetype plugin on " load filetype-specific plugins
 
-let g:ansible_attribute_highlight = 'ab'
+" vim-airline
+let g:airline#extensions#branch#enabled = 1     " enable git branch
+let g:airline#extensions#virtualenv#enabled = 1 " enable virtualenv
+
+" vim-ansible
+let g:ansible_attribute_highlight = 'ab' " highlight all atributes brightly
+
+" python-syntax
+let python_highlight_all = 1
 
 "-- Visual Cues --------------------------------------------------------------"
 set showmatch                  " show matching brackets
 
 set cursorline                 " Highlight the current line
 set number                     " show line numbers
-set colorcolumn=80             " highlight column 80
+set colorcolumn=80,120         " highlight columns to show line length
 
 set wildmenu                   " turn on wild menu
 set wildmode=list:longest,full " better tab completion
 
 
 "-- Autocmds -----------------------------------------------------------------"
-" Remeber position from last time the fiel was opened
+" Remeber position from last time the file was opened
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif

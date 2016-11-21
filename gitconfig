@@ -1,0 +1,18 @@
+[user]
+    name = Thomas O'Donnell
+
+[push]
+    default = simple
+
+[alias]
+    branches = branch -a
+    tags = tag
+    stashes = stash list
+    remotes = remote -v
+
+    staged = diff --staged
+    unstage = reset -q HEAD --
+    discard = checkout --
+    uncommit = reset --mixed HEAD~
+    amend = commit --amend
+    precommit = diff --staged -w --diff-algorithm=minimal

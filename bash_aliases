@@ -11,5 +11,6 @@ alias egrep='egrep --color=auto'
 #-- ls aliases ---------------------------------------------------------------#
 alias l='ls -CF'
 alias ll='ls -l'
+alias l1='ls -1'
 alias la='ls -A'
 alias llh='ls -lGh'
